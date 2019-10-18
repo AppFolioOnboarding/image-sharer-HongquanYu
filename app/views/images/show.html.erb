@@ -1,0 +1,12 @@
+<p>
+  <strong>Title:</strong>
+  <%= @image.title %>
+</p>
+<div>
+    <%= link_to 'Back', new_image_path %>
+</div>
+
+<div>
+  <%= image_tag(@image.link, :alt => @image.title, :width => '400px') %>
+</div>
+
