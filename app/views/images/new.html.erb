@@ -1,19 +1,23 @@
-<% if @image.errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(@image.errors.count, "error") %> prohibited this image from being saved:</h2>
+<div align="center">
+  <% if @image.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@image.errors.count, "error") %> prohibited this image from being saved:</h2>
 
-    <ul>
-      <% @image.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
+      <ul>
+        <% @image.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <h1>New Image</h1>
+
+  <%= render 'form', image: @image %>
+
+  <div>
+    <%= link_to 'Image List', images_path %> |
+    <%= link_to 'Homepage', root_path %>
   </div>
-<% end %>
-
-<h1>New Image</h1>
-
-<%= render 'form', image: @image %>
-
-<div>
-  <%= link_to 'Back to home page', root_path %>
 </div>
+

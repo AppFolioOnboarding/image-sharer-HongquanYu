@@ -1,0 +1,13 @@
+<div align="center">
+  <h1>Images</h1>
+  <%= link_to 'New Image', new_image_path %>
+  <% @images.each do |image| %>
+    <div>
+      <p><strong>Title: </strong><%= image.title %> </p>
+      <%= link_to 'Image Link', image.link, :target => '_blank' %>
+    </div>
+    <%= image_tag(image.link, :width => '400px') %>
+  <% end %>
+  <hr>
+</div>
+

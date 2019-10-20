@@ -10,11 +10,13 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_select('a') do |elements|
-      assert_equal 1, elements.count
+      assert_equal 2, elements.count
 
-      assert_equal 'Submit a new image', elements[0].text
-
+      assert_equal 'New Image', elements[0].text
       assert_equal '/images/new', elements[0].attr('href').to_s
+
+      assert_equal 'Image List', elements[1].text
+      assert_equal '/images', elements[1].attr('href').to_s
     end
   end
 end
