@@ -7,6 +7,7 @@ AllCops:
     - 'node_modules/**/*'
     - 'bin/*'
     - 'config/initializers/simple_form.rb'
+    - 'db/seeds.rb'
   TargetRubyVersion: 2.5
 
 Layout/IndentFirstArrayElement:
@@ -20,9 +21,6 @@ Layout/MultilineMethodCallIndentation:
 
 Metrics/LineLength:
   Max: 200  # Maximum line length from `rails new`
-
-Metrics/ClassLength:
-  Max: 1000
 
 Rails:
   Enabled: true
