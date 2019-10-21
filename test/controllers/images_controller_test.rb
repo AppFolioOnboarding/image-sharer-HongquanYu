@@ -1,5 +1,6 @@
 require 'test_helper'
 
+# rubocop:disable ClassLength
 class ImagesControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect to new image page' do
     img_param1 = { title: 'dog', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg' }
@@ -144,3 +145,4 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 end
+# rubocop:enable ClassLength
