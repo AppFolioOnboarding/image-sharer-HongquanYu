@@ -1,6 +1,10 @@
 class ImagesController < ApplicationController
   before_action :set_image, only: [:show]
 
+  def index
+    @images = Image.all.order('created_at DESC')
+  end
+
   # GET /images/1
   def show; end
 
