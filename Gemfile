@@ -14,6 +14,8 @@ gem 'uglifier', '>= 1.3.0'
 
 gem 'simple_form'
 
+gem 'acts-as-taggable-on', '~>6.0'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Use ActiveModel has_secure_password
