@@ -3,7 +3,7 @@ require 'test_helper'
 # rubocop:disable ClassLength
 class ImagesControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect to new image page' do
-    img_param1 = { title: 'dog', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg' }
+    img_param1 = { title: 'dog', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: 'cute, cat' }
 
     assert_difference('Image.count') do
       post images_path, params: { image: img_param1 }
@@ -13,6 +13,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal img_param1[:title], Image.last[:title]
     assert_equal img_param1[:link], Image.last[:link]
+    assert_equal Image.last.tag_list, %w[cute cat]
     assert_equal 'Image link was successfully submitted.', flash[:notice]
   end
 
@@ -79,6 +80,33 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'index page should have tags which match inserted tags here' do
+    Image.create!(title: 'bulldog', link: 'https://nhl.bamcontent.com/images/photos/301406224/1024x576/cut.jpg', tag_list: %w[bulldog cute])
+    Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog cute])
+
+    get images_path
+    assert_response :ok
+
+    assert_select('div[class=tags]') do |elements|
+      assert_equal 2, elements.count
+
+      assert_includes elements.last.children.first.text, 'Tags: bulldog, cute'
+      assert_includes elements.first.children.first.text, 'Tags: dog, cute'
+    end
+  end
+
+  test 'show page should have tags field with right tags inside of it' do
+    img = Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog cute])
+
+    get image_path(img)
+    assert_response :ok
+
+    assert_select('div[class=tags]') do |elements|
+      assert_equal 1, elements.count
+      assert_includes elements.first.children.first.text, 'Tags: dog, cute'
+    end
+  end
+
   # view tests
 
   test 'should have "New Image" h1 tag' do
@@ -98,17 +126,21 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_select('label') do |labels|
       labels.each do |label|
-        assert_includes ['Title', '* Link'], label.text
+        assert_includes ['Title', '* Link', 'Tags'], label.text
       end
     end
   end
 
-  test 'should have 2 input tags' do
+  test 'should have 2 input tags and 1 textarea' do
     get new_image_path
     assert_response :ok
 
     assert_select('input[type=text]') do |inputs|
       assert_equal 2, inputs.count
+    end
+
+    assert_select('textarea[id=image_tag_list]') do |inputs|
+      assert_equal 1, inputs.count
     end
   end
 
@@ -142,6 +174,15 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_select('a') do |img|
       assert_equal 'New Image', img[0].text
+    end
+  end
+
+  test 'should have inputted tags correctly displayed in the template' do
+    get new_image_path
+    assert_response :ok
+
+    assert_select('textarea[id=image_tag_list]') do |elements|
+      assert_equal 1, elements.count
     end
   end
 end

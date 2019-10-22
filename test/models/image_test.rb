@@ -21,4 +21,13 @@ class ImageTest < ActiveSupport::TestCase
     refute_predicate img, :valid?
     assert_includes img.errors[:link], 'can\'t be blank'
   end
+
+  def test_image__should_check_tag
+    Image.create(title: 'dog', link: 'https://www.gopetplan.com/sites/default/files/2018-07/rsz_shutterstock_165545006.jpg', tag_list: %w[dog cute])
+
+    tags = Image.last.tag_list
+    assert_equal 2, tags.count
+    assert_includes tags, 'dog'
+    assert_includes tags, 'cute'
+  end
 end
