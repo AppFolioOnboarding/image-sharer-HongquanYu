@@ -1,6 +1,8 @@
 class Image < ApplicationRecord
   require 'uri'
 
+  acts_as_taggable
+
   validates :link, presence: true
   validate :valid_url?
 
