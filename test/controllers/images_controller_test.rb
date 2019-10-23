@@ -13,7 +13,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal img_param1[:title], Image.last[:title]
     assert_equal img_param1[:link], Image.last[:link]
-    assert_equal Image.last.tag_list, %w[cute cat]
+    assert_equal %w[cute cat], Image.last.tag_list
     assert_equal 'Image link was successfully submitted.', flash[:notice]
   end
 
@@ -81,17 +81,17 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'index page should have tags which match inserted tags here' do
-    Image.create!(title: 'bulldog', link: 'https://nhl.bamcontent.com/images/photos/301406224/1024x576/cut.jpg', tag_list: %w[bulldog cute])
-    Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog cute])
+    Image.create!(title: 'bulldog', link: 'https://nhl.bamcontent.com/images/photos/301406224/1024x576/cut.jpg', tag_list: %w[cute])
+    Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog])
 
     get images_path
     assert_response :ok
 
-    assert_select('div[class=tags]') do |elements|
+    assert_select('strong[class=js-tag-class]') do |elements|
       assert_equal 2, elements.count
 
-      assert_includes elements.last.children.first.text, 'Tags: bulldog, cute'
-      assert_includes elements.first.children.first.text, 'Tags: dog, cute'
+      assert_equal elements.last.children.first.text.strip, 'cute'
+      assert_equal elements.first.children.first.text.strip, 'dog'
     end
   end
 
@@ -101,10 +101,54 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     get image_path(img)
     assert_response :ok
 
-    assert_select('div[class=tags]') do |elements|
-      assert_equal 1, elements.count
-      assert_includes elements.first.children.first.text, 'Tags: dog, cute'
+    assert_select('strong[class=js-tag-class]') do |elements|
+      assert_equal 2, elements.count
+
+      assert_equal 'dog', elements.first.text.strip
+      assert_equal 'cute', elements.last.text.strip
     end
+  end
+
+  test 'index page should display all images if there is no parmas passed' do
+    Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog cute])
+    Image.create!(title: 'puppy2', link: 'https://nhl.bamcontent.com/images/photos/301406224/1024x576/cut.jpg', tag_list: %w[puppy notcute])
+
+    get images_path
+    assert_response :ok
+
+    assert_select('img') do |elements|
+      assert_equal 2, elements.count
+
+      assert_equal 'https://nhl.bamcontent.com/images/photos/301406224/1024x576/cut.jpg', elements[0].attributes['src'].value
+      assert_equal 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', elements[1].attributes['src'].value
+    end
+  end
+
+  test 'index page should display images with a tag on it' do
+    Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog cute])
+    Image.create!(title: 'puppy2', link: 'https://nhl.bamcontent.com/images/photos/301406224/1024x576/cut.jpg', tag_list: %w[puppy notcute])
+    Image.create!(title: 'cat', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[cat notcute])
+
+    get images_path(tag: 'notcute')
+    assert_response :ok
+
+    assert_select('img') do |elements|
+      assert_equal 2, elements.count
+
+      assert_equal 'https://nhl.bamcontent.com/images/photos/301406224/1024x576/cut.jpg', elements[0].attributes['src'].value
+      assert_equal 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', elements[1].attributes['src'].value
+    end
+  end
+
+  test 'index page should show no images when sending a non-existing image' do
+    Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog cute])
+    Image.create!(title: 'puppy2', link: 'https://nhl.bamcontent.com/images/photos/301406224/1024x576/cut.jpg', tag_list: %w[puppy notcute])
+
+    get images_path(tag: 'random-tag')
+    assert_response :ok
+
+    # assert_select('img', false) # for future reference
+    assert_select('img', count: 0)
   end
 
   # view tests

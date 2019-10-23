@@ -2,7 +2,9 @@ class ImagesController < ApplicationController
   before_action :set_image, only: [:show]
 
   def index
-    @images = Image.all.order('created_at DESC')
+    @single_tag = params[:tag]
+
+    @images = @single_tag ? Image.tagged_with([@single_tag]) : Image.all.order('created_at DESC')
   end
 
   # GET /images/1
