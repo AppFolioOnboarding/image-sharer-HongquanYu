@@ -4,5 +4,6 @@
   <span>Tags: </span>
   <% image.tag_list.each do |tag| %>
     <span> <%= link_to content_tag(:strong, "#{tag}", class:['js-tag-class']), images_path(tag: tag) %></span>
-  <% end %>
+  <% end %> |
+  <span><%= link_to 'Delete', image_path(image), method: :delete, data: {confirm: "Are you sure to delete image with id #{image.id}"}%></span>
 </div>

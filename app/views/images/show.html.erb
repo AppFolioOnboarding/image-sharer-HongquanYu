@@ -5,7 +5,7 @@
 <div>
     <%= link_to 'Back', new_image_path %>
 </div>
-<%= render 'tags', image: @image %>
+<%= render 'img-info', image: @image %>
 <div>
   <%= image_tag(@image.link, :alt => @image.title, :width => '400px') %>
 </div>

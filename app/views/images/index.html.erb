@@ -16,7 +16,7 @@
   <hr>
   <%= %>
   <% @images.each do |image| %>
-    <%= render 'tags', image: image %>
+    <%= render 'img-info', image: image %>
     <%= image_tag(image.link, :width => '400px') %>
   <% end %>
   <hr>
