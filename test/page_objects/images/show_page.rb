@@ -3,26 +3,33 @@ module PageObjects
     class ShowPage < PageObjects::Document
       path :image
 
+      element :notice, locator: '#notice'
+      element :url, locator: '.img_url'
+
+      collection :tag_elements, locator: '.js-tags', item_locator: '.js-tag-class'
+
       def image_url
-        # TODO
+        node.find('.img_url')[:src]
       end
 
       def tags
-        # TODO
+        tag_elements.map(&:text)
       end
 
       def delete
-        # TODO
-        yield node.driver.browser.switch_to.alert
+        node.click_on('Delete')
+        yield node.driver.browser.switch_to.alert if block_given?
       end
 
       def delete_and_confirm!
-        # TODO
+        delete
+        node.driver.browser.switch_to.alert.accept
         window.change_to(IndexPage)
       end
 
       def go_back_to_index!
-        # TODO
+        node.click_on('Image List')
+        window.change_to(IndexPage)
       end
     end
   end

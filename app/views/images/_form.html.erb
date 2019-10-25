@@ -1,6 +1,6 @@
 <%= simple_form_for @image do |image| %>
-  <%= image.input :title, label: 'Title', placeholder: 'title of image' %>
-  <%= image.input :link, label: 'Link', required: true, placeholder: 'image url' %>
-  <%= image.input :tag_list, as: :Text, label: 'Tags', placeholder: 'image tags' %>
-  <%= image.button :submit %>
+  <%= image.input :title, label: 'Title', placeholder: 'title of image', input_html: { class: 'image-title'} %>
+  <%= image.input :link, label: 'Link', required: true, placeholder: 'image url', input_html: { class: 'image-link'} %>
+  <%= image.input :tag_list, as: :Text, label: 'Tags', placeholder: 'image tags', input_html: { class: 'image-tag-list'} %>
+  <%= image.button :submit, class: 'new-image-btn' %>
 <% end %>

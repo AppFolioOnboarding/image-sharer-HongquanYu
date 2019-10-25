@@ -6,11 +6,14 @@ module PageObjects
       end
 
       def tags
-        # TODO
+        node.all('.js-tag-class').map(&:text)
       end
 
       def click_tag!(tag_name)
-        # TODO
+        node.all('.js-tag-class').map do |link|
+          link.click if link.text == tag_name
+        end
+        window.change_to(IndexPage)
       end
     end
   end

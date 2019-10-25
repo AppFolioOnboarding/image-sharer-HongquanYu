@@ -4,7 +4,7 @@
     <%= link_to 'New Image', new_image_path %>
   </span> |
   <span>
-    <%= link_to 'Image List', images_path %>
+    <%= link_to 'Image List', images_path, :class => 'js-index-btn' %>
   </span>
   <div>
     <% if @single_tag %>
@@ -14,11 +14,14 @@
     <% end %>
   </div>
   <hr>
-  <%= %>
-  <% @images.each do |image| %>
-    <%= render 'img-info', image: image %>
-    <%= image_tag(image.link, :width => '400px') %>
-  <% end %>
+  <div class="js-image-list">
+    <% @images.each do |image| %>
+      <div class="js-single-image">
+        <%= render 'img-info', image: image %>
+        <%= image_tag(image.link, :width => '400px', :class => 'js-img') %>
+      </div>
+    <% end %>
+  </div>
   <hr>
 </div>
 

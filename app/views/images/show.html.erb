@@ -3,10 +3,15 @@
   <%= @image.title %>
 </p>
 <div>
+  <span>
     <%= link_to 'Back', new_image_path %>
+  </span> |
+  <span>
+    <%= link_to 'Image List', images_path %>
+  </span>
 </div>
 <%= render 'img-info', image: @image %>
 <div>
-  <%= image_tag(@image.link, :alt => @image.title, :width => '400px') %>
+  <%= image_tag(@image.link, :alt => @image.title, :width => '400px', :class => 'img_url') %>
 </div>
 
