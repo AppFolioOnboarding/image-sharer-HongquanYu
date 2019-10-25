@@ -7,15 +7,12 @@ class ImagesController < ApplicationController
     @images = @single_tag ? Image.tagged_with([@single_tag]) : Image.all.order('created_at DESC')
   end
 
-  # GET /images/1
   def show; end
 
-  # GET /images/new
   def new
     @image = Image.new
   end
 
-  # POST /images
   def create
     @image = Image.new(image_params)
     if @image.save
@@ -26,9 +23,19 @@ class ImagesController < ApplicationController
     end
   end
 
+  def destroy
+    id = params[:id] # This variable is to bypass rubocop condition length check
+    if !Image.exists?(id)
+      flash[:notice] = "Image with id #{id} does not exist!"
+    else
+      Image.find(id).destroy
+      flash[:notice] = "Image with id #{id} has been successfully deleted!"
+    end
+    redirect_to images_path
+  end
+
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_image
     if !Image.exists?(params[:id])
       flash[:notice] = "Image with id #{params[:id]} does not exist"
@@ -38,7 +45,6 @@ class ImagesController < ApplicationController
     end
   end
 
-  # Only allow a trusted parameter "white list" through.
   def image_params
     params.require(:image).permit(:title, :link, :tag_list)
   end
