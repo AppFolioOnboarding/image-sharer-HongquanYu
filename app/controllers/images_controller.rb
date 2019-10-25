@@ -28,8 +28,7 @@ class ImagesController < ApplicationController
     if !Image.exists?(id)
       flash[:notice] = "Image with id #{id} does not exist!"
     else
-      img = Image.find(id)
-      img.destroy
+      Image.find(id).destroy
       flash[:notice] = "Image with id #{id} has been successfully deleted!"
     end
     redirect_to images_path

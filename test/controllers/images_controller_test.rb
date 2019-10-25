@@ -1,6 +1,6 @@
 require 'test_helper'
 
-# rubocop:disable ClassLength
+# rubocop:disable Metrics/ClassLength
 class ImagesControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect to new image page' do
     img_param1 = { title: 'dog', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: 'cute, cat' }
@@ -151,25 +151,25 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select('img', count: 0)
   end
 
-  test 'index page should delete an existed image' do
+  test 'should delete an existed image' do
     img = Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog cute])
 
-    get images_path
-    assert_response :ok
-    assert_select('img', count: 1)
+    assert_equal 1, Image.count
 
-    delete image_path(img)
+    assert_changes('Image.count') do
+      delete image_path(img)
+    end
+
+    assert_equal 0, Image.count
 
     assert_redirected_to images_path
     assert_equal 'Image with id 1 has been successfully deleted!', flash[:notice]
     assert_select('img', count: 0)
   end
 
-  test 'index page should redirect to index page when try to delete a non-existing image' do
+  test 'should redirect to index page when try to delete a non-existing image' do
     Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog cute])
 
-    get images_path
-    assert_response :ok
     assert_equal 1, Image.count
 
     assert_no_difference('Image.count') do
@@ -179,20 +179,6 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to images_path
     assert_equal 'Image with id -1 does not exist!', flash[:notice]
     assert_equal 1, Image.count
-  end
-
-  test 'show page should delete an existed image' do
-    img = Image.create!(title: 'puppy', link: 'https://cdn.orvis.com/images/DBS_SibHusky.jpg', tag_list: %w[dog cute])
-
-    get image_path(img)
-    assert_response :ok
-    assert_select('img', count: 1)
-
-    delete image_path(img)
-
-    assert_redirected_to images_path
-    assert_equal 'Image with id 1 has been successfully deleted!', flash[:notice]
-    assert_select('img', count: 0)
   end
 
   # view tests
@@ -298,4 +284,4 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 end
-# rubocop:enable ClassLength
+# rubocop:enable Metrics/ClassLength
