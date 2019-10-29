@@ -12,10 +12,12 @@
     "coffeescript": "1.12.7",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
+    "production": "0.0.2",
     "prop-types": "^15.6.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "reactstrap": "^7.1.0"
+    "reactstrap": "^7.1.0",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "assert": "^1.4.1",

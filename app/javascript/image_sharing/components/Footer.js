@@ -10,7 +10,8 @@ class Footer extends Component {
     const styles = {
       bottom: 0,
       width: '100%',
-      position: 'absolute'
+      position: 'absolute',
+      textAlign: 'center'
     }
     return (
       <div>

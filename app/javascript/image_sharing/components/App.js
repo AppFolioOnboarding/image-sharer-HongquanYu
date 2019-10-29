@@ -1,25 +1,31 @@
 import React, { Component } from 'react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
+import PropTypes from 'prop-types';
+
 import Header from './Header';
 import Footer from "./Footer";
 import FeedbackForm from "./FeedbackForm";
 import FeedbackList from "./FeedbackList";
-import PropTypes from 'prop-types';
 
+@observer
 class App extends Component {
   static propTypes = {
     stores: PropTypes.object.isRequired
   };
 
   render() {
-    const store = this.props.stores.feedbackStore;
+    const flashMsg = this.props.stores.flashMsgStore.flashMessage;
+    const styles = {
+      textAlign: 'center'
+    }
 
     return (
       <div>
         <Header title={'Tell us what you think'} />
+        <div style={styles} className={'js-flash-message'}> {flashMsg} </div>
         <h4>Feedback List</h4>
-        <FeedbackList store={store} />
-        <FeedbackForm store={store} />
+        <FeedbackList />
+        <FeedbackForm />
         <Footer footer={'Copyright: AppFolio Inc. Onboarding'} />
       </div>
     )
