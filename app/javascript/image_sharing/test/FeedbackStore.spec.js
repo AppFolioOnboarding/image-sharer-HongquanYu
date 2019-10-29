@@ -1,18 +1,23 @@
 import { expect } from 'chai';
 import {toJS} from 'mobx';
+import sinon from 'sinon';
 
 import { FeedbackStore } from "../stores/FeedbackStore";
 
 describe('FeedbackStore', () => {
   it('should push a new feedback object in store', () => {
-    const store = new FeedbackStore();
-    expect(store.feedbacks.length).to.equal(0);
+    const mock = new FeedbackStore();
+    mock.httpPostRequestHandler.httpPost = sinon.spy();
 
-    store.addFeedback('this is a name', 'this is a comment');
+    expect(mock.feedbacks.length).to.equal(0);
 
-    expect(store.feedbacks.length).to.equal(1);
+    mock.addFeedback('test name', 'test comment');
 
-    expect(toJS(store.feedbacks)[0].name).to.equal('this is a name');
-    expect(toJS(store.feedbacks)[0].comment).to.equal('this is a comment');
+    expect(mock.feedbacks.length).to.equal(1);
+
+    expect(toJS(mock.feedbacks)[0].name).to.equal('test name');
+    expect(toJS(mock.feedbacks)[0].comment).to.equal('test comment');
+
+    expect(mock.httpPostRequestHandler.httpPost.withArgs('test name', 'test comment').calledOnce).to.equal(true);
   })
 });

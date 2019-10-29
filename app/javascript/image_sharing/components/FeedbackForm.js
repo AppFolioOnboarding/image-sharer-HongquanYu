@@ -21,7 +21,7 @@ class FeedbackForm extends Component {
   };
 
   @action
-  onFormSubmit = (event) => {
+  onFormSubmit = () => {
     const flashMsgStore = this.props.stores.flashMsgStore;
     const feedbackStore = this.props.stores.feedbackStore;
 
