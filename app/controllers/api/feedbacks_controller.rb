@@ -1,7 +1,9 @@
 module Api
   class FeedbacksController < ApplicationController
+    skip_before_action :verify_authenticity_token
+
     def create
-      # Implement your create action
+      head :ok
     end
   end
 end

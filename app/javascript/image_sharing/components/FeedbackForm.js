@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { observable, action } from 'mobx';
 import PropTypes from 'prop-types';
 
+@inject('stores')
 @observer
 class FeedbackForm extends Component {
   static propTypes = {
-    store: PropTypes.object.isRequired
+    stores: PropTypes.object.isRequired
   };
 
-  @observable
-  feedback = { name: '', comment: '' };
+  @observable feedback = { name: '', comment: '' };
 
   onNameChange = (event) => {
     this.feedback.name = event.target.value;
@@ -21,17 +21,26 @@ class FeedbackForm extends Component {
   };
 
   @action
-  onFormSubmit = (event) => {
-    // event.preventDefault();
-    this.props.store.addFeedback(this.feedback.name, this.feedback.comment);
-    this.feedback.name = '';
-    this.feedback.comment = '';
-  }
+  onFormSubmit = () => {
+    const flashMsgStore = this.props.stores.flashMsgStore;
+    const feedbackStore = this.props.stores.feedbackStore;
+
+    return feedbackStore.addFeedback(this.feedback.name, this.feedback.comment).then(() => {
+      flashMsgStore.flashMessage = 'Http post request succeed!';
+
+      // clear fields when successfully post feedback
+      this.feedback.name = '';
+      this.feedback.comment = '';
+    }).catch((error) => {
+      console.log('error in catch block', error);
+      flashMsgStore.flashMessage = 'Http post request failed!';
+    })
+  };
 
   render() {
     const center = {
       textAlign: 'center'
-    }
+    };
 
     return (
       <div style={center}>

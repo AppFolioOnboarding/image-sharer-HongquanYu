@@ -37,7 +37,7 @@ export function serialize(obj, prefix) {
  */
 function checkResponseStatus(res) {
   const status = res.status;
-  if (status === 204) {
+  if (status === 204 || status === 200) {
     return Promise.resolve(); // No content
   } else if (status === 302) {
     window.location.reload();

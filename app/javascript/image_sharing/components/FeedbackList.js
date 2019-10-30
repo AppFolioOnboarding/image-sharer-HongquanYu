@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { observer } from 'mobx-react';
-import {toJS} from 'mobx';
+import { observer, inject } from 'mobx-react';
 
+@inject('stores')
 @observer
 class FeedbackList extends Component {
   static propTypes = {
-    store: PropTypes.object.isRequired
+    stores: PropTypes.object.isRequired
   };
 
   render() {
     const divWrapper = {
       width: '100%'
     }
-    const feedbackStore = this.props.store;
+    const feedbackStore = this.props.stores.feedbackStore;
 
     const listItems = feedbackStore.feedbacks.map((singleFB) => (
       <li className={'js-list-item'}>

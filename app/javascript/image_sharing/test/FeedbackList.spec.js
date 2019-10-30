@@ -2,17 +2,23 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import FeedbackList from "../components/FeedbackList";
-import sinon from "sinon";
 
 describe('<FeedbackList />', () => {
-  let store;
+  let stores;
 
   beforeEach(() => {
-    store = { feedbacks: [{name: 'test name', comment: 'test comment'}] };
+    stores = {
+      feedbackStore: {
+        feedbacks: [{name: 'test name', comment: 'test comment'}]
+      },
+      flashMsgStore: {
+        flashMessage: 'test message'
+      }
+    };
   });
 
   it('should render', () => {
-    const wrapper = shallow(<FeedbackList store={store}/>);
+    const wrapper = shallow(<FeedbackList.wrappedComponent stores={stores}/>);
 
     const listItem = wrapper.find('.js-list-item');
     expect(listItem).to.have.length(1);
